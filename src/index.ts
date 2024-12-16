@@ -97,19 +97,25 @@ const cron_service_onchain = async () => {
 // // run every 10 sec
 // cron.schedule("*/10 * * * * *", cron_service)
 
-// run every friday at 5 pm GMT
-// cron.schedule("0 17 * * 5", cron_service)
+// run every friday at 5 pm IST
+cron.schedule("0 17 * * 5", cron_service_values)
+
+// run every saturday at 5 pm GMT
+cron.schedule("0 17 * * 6", cron_service_onchain)
+
+// run every monday at 17:35 
+// cron.schedule("38 17 * * 1", cron_service_values)
 
 // run cron_service_values every 5 min, run cron_service_onchain every 5 min but after 2.5 min of cron_service_values
-cron.schedule("*/5 * * * *", () => {
-  console.log("Triggering values job...");
-  cron_service_values();
-});
+// cron.schedule("*/5 * * * *", () => {
+//   console.log("Triggering values job...");
+//   cron_service_values();
+// });
 
-// Schedule cron_service_onchain to run 2.5 minutes (150 seconds) after cron_service_values
-cron.schedule("*/5 * * * *", () => {
-  console.log("Scheduling onchain job with 2.5-minute delay...");
-  setTimeout(() => {
-    cron_service_onchain();
-  }, 150000); // 150,000 milliseconds = 2.5 minutes
-});
+// // Schedule cron_service_onchain to run 2.5 minutes (150 seconds) after cron_service_values
+// cron.schedule("*/5 * * * *", () => {
+//   console.log("Scheduling onchain job with 2.5-minute delay...");
+//   setTimeout(() => {
+//     cron_service_onchain();
+//   }, 150000); // 150,000 milliseconds = 2.5 minutes
+// });
