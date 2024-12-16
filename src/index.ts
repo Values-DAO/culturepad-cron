@@ -19,17 +19,21 @@ const cron_service_values = async () => {
     isValuesJobRunning = true;
     console.log("Running values cron service...", new Date().toISOString());
 
-    const _responseTelegramBot = await axios.post(
+    const responseTelegramBot = await axios.post(
       `${config.telegramApi}/api/process-messages`,
       {},
       {
         headers: {
           "x-api-key": process.env.CRON_API_KEY,
         },
-        timeout: 180000, // 180 second timeout
+        // timeout: 180000, // 180 second timeout
       }
     );
-
+    
+    if (responseTelegramBot.status !== 200) {
+      throw new Error(`Telegram bot service failed`);
+    }
+    
     console.log(`Bot service working fine`);
   } catch (error) {
     // Just log the error and continue - no retry
@@ -49,7 +53,7 @@ const cron_service_onchain = async () => {
     isOnchainJobRunning = true;
     console.log("Running onchain cron service...", new Date().toISOString());
 
-    const _response = await axios.post(
+    const response = await axios.post(
       `${config.backendApi}/cultureBook/post-onchain`,
       {},
       {
@@ -57,9 +61,13 @@ const cron_service_onchain = async () => {
         headers: {
           "x-api-key": process.env.CRON_API_KEY,
         },
-        timeout: 300000, // 5 min timeout
+        // timeout: 300000, // 5 min timeout
       }
     );
+    
+    if (response.status !== 200) {
+      throw new Error(`Onchain service failed`);
+    }
 
     console.log(`Onchain service working fine`);
   } catch (error) {
@@ -70,15 +78,15 @@ const cron_service_onchain = async () => {
   }
 };
 
-// cron_service()
+// cron_service_values();
 
-cron_service_onchain();
+// cron_service_onchain();
 
 // run every min
 // cron.schedule("* * * * *", cron_service_values)
 
 // run every 2 min
-// cron.schedule("*/2 * * * *", cron_service)
+// cron.schedule("*/2 * * * *", cron_service_onchain);
 
 // run every 2 sec
 // cron.schedule("*/2 * * * * *", cron_service)
@@ -91,3 +99,17 @@ cron_service_onchain();
 
 // run every friday at 5 pm GMT
 // cron.schedule("0 17 * * 5", cron_service)
+
+// run cron_service_values every 5 min, run cron_service_onchain every 5 min but after 2.5 min of cron_service_values
+cron.schedule("*/5 * * * *", () => {
+  console.log("Triggering values job...");
+  cron_service_values();
+});
+
+// Schedule cron_service_onchain to run 2.5 minutes (150 seconds) after cron_service_values
+cron.schedule("*/5 * * * *", () => {
+  console.log("Scheduling onchain job with 2.5-minute delay...");
+  setTimeout(() => {
+    cron_service_onchain();
+  }, 150000); // 150,000 milliseconds = 2.5 minutes
+});
