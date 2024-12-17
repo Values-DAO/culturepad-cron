@@ -97,13 +97,19 @@ const cron_service_onchain = async () => {
 // // run every 10 sec
 // cron.schedule("*/10 * * * * *", cron_service)
 
-// run every friday at 5 pm IST
-cron.schedule("0 17 * * 5", cron_service_values)
+// run every friday at 17:30 IST
+// cron.schedule("0 17 * * 5", cron_service_values)
 
-// run every saturday at 5 pm GMT
-cron.schedule("0 17 * * 6", cron_service_onchain)
+// run every saturday at 17:35 IST
+// cron.schedule("0 17 * * 6", cron_service_onchain)
 
-// run every monday at 17:35 
+// Run every Friday at 17:30 IST (12:00 UTC)
+cron.schedule("0 12 * * 5", cron_service_values);
+
+// Run every Saturday at 17:35 IST (12:05 UTC)
+cron.schedule("5 12 * * 6", cron_service_onchain);
+
+// run every monday at 17:35 IST
 // cron.schedule("38 17 * * 1", cron_service_values)
 
 // run cron_service_values every 5 min, run cron_service_onchain every 5 min but after 2.5 min of cron_service_values
