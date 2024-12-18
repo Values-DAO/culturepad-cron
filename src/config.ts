@@ -7,7 +7,7 @@ export const config = {
       : "http://localhost:3005",
   backendApi: // TODO: FIX THIS SHIT
     process.env.ENV === "prod"
-      ? "https://staging-api.valuesdao.io"
+      ? "https://api.valuesdao.io"
       : process.env.ENV === "staging"
       ? "https://staging-api.valuesdao.io"
       : "http://localhost:3000",
