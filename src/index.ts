@@ -151,7 +151,7 @@ const combinedCronService = async () => {
 // cron_service_onchain();
 
 // run every min
-cron.schedule("*/2 * * * *", combinedCronService)
+cron.schedule("*/5 * * * *", combinedCronService)
 
 // run every 2 min
 // cron.schedule("*/2 * * * *", cron_service_onchain);
