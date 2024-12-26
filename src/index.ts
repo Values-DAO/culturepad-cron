@@ -111,47 +111,49 @@ const combinedCronService = async () => {
 //   }
 // };
 
-// const cron_service_onchain = async () => {
-//   if (isOnchainJobRunning) {
-//     console.log("Previous onchain job still running, skipping...");
-//     return;
-//   }
+const cron_service_onchain = async () => {
+  if (isOnchainJobRunning) {
+    console.log("Previous onchain job still running, skipping...");
+    return;
+  }
 
-//   try {
-//     isOnchainJobRunning = true;
-//     console.log("Running onchain cron service...", new Date().toISOString());
+  try {
+    isOnchainJobRunning = true;
+    console.log("Running onchain cron service...", new Date().toISOString());
 
-//     const response = await axios.post(
-//       `${config.backendApi}/cultureBook/post-onchain`,
-//       {},
-//       {
-//         // TODO: Add this header to the backend API
-//         headers: {
-//           "x-api-key": process.env.CRON_API_KEY,
-//         },
-//         // timeout: 300000, // 5 min timeout
-//       }
-//     );
+    const response = await axios.post(
+      `${config.backendApi}/cultureBook/post-onchain`,
+      {},
+      {
+        // TODO: Add this header to the backend API
+        headers: {
+          "x-api-key": process.env.CRON_API_KEY,
+        },
+        // timeout: 300000, // 5 min timeout
+      }
+    );
     
-//     if (response.status !== 200) {
-//       throw new Error(`Onchain service failed`);
-//     }
+    if (response.status !== 200) {
+      throw new Error(`Onchain service failed`);
+    }
 
-//     console.log(`Onchain service working fine`);
-//   } catch (error) {
-//     // Just log the error and continue - no retry
-//     console.error("Onchain service call failed:", error);
-//   } finally {
-//     isOnchainJobRunning = false;
-//   }
-// };
+    console.log(`Onchain service working fine`);
+  } catch (error) {
+    // Just log the error and continue - no retry
+    console.error("Onchain service call failed:", error);
+  } finally {
+    isOnchainJobRunning = false;
+  }
+};
+
+cron_service_onchain()
 
 // cron_service_values();
 
 // cron_service_onchain();
 
 // run every min
-cron.schedule("*/5 * * * *", combinedCronService)
+// cron.schedule("*/5 * * * *", combinedCronService)
 
 // run every 2 min
 // cron.schedule("*/2 * * * *", cron_service_onchain);
