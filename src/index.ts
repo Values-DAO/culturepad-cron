@@ -8,7 +8,7 @@ dotenv.config();
 let isValuesJobRunning = false;
 let isOnchainJobRunning = false;
 
-const cron_service_values = async () => {
+const combinedCronService = async () => {
   // Skip if another job is already running
   if (isValuesJobRunning) {
     console.log("Previous values job still running, skipping...");
@@ -29,11 +29,11 @@ const cron_service_values = async () => {
         // timeout: 180000, // 180 second timeout
       }
     );
-    
+
     if (responseTelegramBot.status !== 200) {
       throw new Error(`Telegram bot service failed`);
     }
-    
+
     console.log(`Bot service working fine`);
   } catch (error) {
     // Just log the error and continue - no retry
@@ -41,9 +41,7 @@ const cron_service_values = async () => {
   } finally {
     isValuesJobRunning = false;
   }
-};
-
-const cron_service_onchain = async () => {
+  
   if (isOnchainJobRunning) {
     console.log("Previous onchain job still running, skipping...");
     return;
@@ -64,7 +62,7 @@ const cron_service_onchain = async () => {
         // timeout: 300000, // 5 min timeout
       }
     );
-    
+
     if (response.status !== 200) {
       throw new Error(`Onchain service failed`);
     }
@@ -76,14 +74,84 @@ const cron_service_onchain = async () => {
   } finally {
     isOnchainJobRunning = false;
   }
-};
+}
+
+// const cron_service_values = async () => {
+//   // Skip if another job is already running
+//   if (isValuesJobRunning) {
+//     console.log("Previous values job still running, skipping...");
+//     return;
+//   }
+
+//   try {
+//     isValuesJobRunning = true;
+//     console.log("Running values cron service...", new Date().toISOString());
+
+//     const responseTelegramBot = await axios.post(
+//       `${config.telegramApi}/api/process-messages`,
+//       {},
+//       {
+//         headers: {
+//           "x-api-key": process.env.CRON_API_KEY,
+//         },
+//         // timeout: 180000, // 180 second timeout
+//       }
+//     );
+    
+//     if (responseTelegramBot.status !== 200) {
+//       throw new Error(`Telegram bot service failed`);
+//     }
+    
+//     console.log(`Bot service working fine`);
+//   } catch (error) {
+//     // Just log the error and continue - no retry
+//     console.error("Bot service call failed:", error);
+//   } finally {
+//     isValuesJobRunning = false;
+//   }
+// };
+
+// const cron_service_onchain = async () => {
+//   if (isOnchainJobRunning) {
+//     console.log("Previous onchain job still running, skipping...");
+//     return;
+//   }
+
+//   try {
+//     isOnchainJobRunning = true;
+//     console.log("Running onchain cron service...", new Date().toISOString());
+
+//     const response = await axios.post(
+//       `${config.backendApi}/cultureBook/post-onchain`,
+//       {},
+//       {
+//         // TODO: Add this header to the backend API
+//         headers: {
+//           "x-api-key": process.env.CRON_API_KEY,
+//         },
+//         // timeout: 300000, // 5 min timeout
+//       }
+//     );
+    
+//     if (response.status !== 200) {
+//       throw new Error(`Onchain service failed`);
+//     }
+
+//     console.log(`Onchain service working fine`);
+//   } catch (error) {
+//     // Just log the error and continue - no retry
+//     console.error("Onchain service call failed:", error);
+//   } finally {
+//     isOnchainJobRunning = false;
+//   }
+// };
 
 // cron_service_values();
 
 // cron_service_onchain();
 
 // run every min
-// cron.schedule("* * * * *", cron_service_values)
+// cron.schedule("*/5 * * * *", combinedCronService)
 
 // run every 2 min
 // cron.schedule("*/2 * * * *", cron_service_onchain);
@@ -104,10 +172,15 @@ const cron_service_onchain = async () => {
 // cron.schedule("0 17 * * 6", cron_service_onchain)
 
 // Run every Friday at 17:30 IST (12:00 UTC)
-cron.schedule("0 12 * * 5", cron_service_values);
+// cron.schedule("0 12 * * 5", cron_service_values);
 
 // Run every Saturday at 17:35 IST (12:05 UTC)
-cron.schedule("5 12 * * 6", cron_service_onchain);
+// cron.schedule("5 12 * * 6", cron_service_onchain);
+
+// Run every Friday at 17:30 IST (12:00 UTC)
+// cron.schedule("30 17 * * 5", combinedCronService);
+  
+combinedCronService();
 
 // run every monday at 17:35 IST
 // cron.schedule("38 17 * * 1", cron_service_values)
