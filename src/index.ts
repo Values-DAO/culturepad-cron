@@ -178,10 +178,10 @@ const combinedCronService = async () => {
 // cron.schedule("5 12 * * 6", cron_service_onchain);
 
 // Run every Friday at 6:10 IST (12:40 UTC)
-// cron.schedule("46 12 * * *", combinedCronService);
+cron.schedule("57 12 * * *", combinedCronService);
 
 // Run every Friday at 12 noon IST (6:30 UTC)
-cron.schedule("30 6 * * 5", combinedCronService);
+// cron.schedule("30 6 * * 5", combinedCronService);
 
 // Run every Friday at 17:30 IST (12:00 UTC)
 // cron.schedule("30 17 * * 5", combinedCronService);
