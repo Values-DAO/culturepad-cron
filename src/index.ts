@@ -151,7 +151,7 @@ const combinedCronService = async () => {
 // cron_service_onchain();
 
 // run every min
-cron.schedule("*/5 * * * *", combinedCronService)
+// cron.schedule("*/5 * * * *", combinedCronService)
 
 // run every 2 min
 // cron.schedule("*/2 * * * *", cron_service_onchain);
@@ -176,6 +176,9 @@ cron.schedule("*/5 * * * *", combinedCronService)
 
 // Run every Saturday at 17:35 IST (12:05 UTC)
 // cron.schedule("5 12 * * 6", cron_service_onchain);
+
+// Run every Friday at 6:10 IST (12:40 UTC)
+cron.schedule("50 12 * * 4", combinedCronService);
 
 // Run every Friday at 17:30 IST (12:00 UTC)
 // cron.schedule("30 17 * * 5", combinedCronService);
