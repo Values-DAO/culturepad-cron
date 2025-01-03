@@ -26,7 +26,6 @@ const combinedCronService = async () => {
         headers: {
           "x-api-key": process.env.CRON_API_KEY,
         },
-        // timeout: 180000, // 180 second timeout
       }
     );
 
@@ -36,7 +35,6 @@ const combinedCronService = async () => {
 
     console.log(`Bot service working fine`);
   } catch (error) {
-    // Just log the error and continue - no retry
     console.error("Bot service call failed:", error);
   } finally {
     isValuesJobRunning = false;
@@ -59,7 +57,6 @@ const combinedCronService = async () => {
         headers: {
           "x-api-key": process.env.CRON_API_KEY,
         },
-        // timeout: 300000, // 5 min timeout
       }
     );
 
@@ -69,7 +66,6 @@ const combinedCronService = async () => {
 
     console.log(`Onchain service working fine`);
   } catch (error) {
-    // Just log the error and continue - no retry
     console.error("Onchain service call failed:", error);
   } finally {
     isOnchainJobRunning = false;
@@ -150,8 +146,10 @@ const combinedCronService = async () => {
 
 // cron_service_onchain();
 
+// combinedCronService()
+
 // run every min
-// cron.schedule("*/5 * * * *", combinedCronService)
+cron.schedule("*/3 * * * *", combinedCronService)
 
 // run every 2 min
 // cron.schedule("*/2 * * * *", cron_service_onchain);
@@ -181,7 +179,7 @@ const combinedCronService = async () => {
 // cron.schedule("5 13 * * *", combinedCronService);
 
 // Run every Friday at 12 noon IST (6:30 UTC)
-cron.schedule("30 6 * * 5", combinedCronService);
+// cron.schedule("30 6 * * 5", combinedCronService);
 
 // Run every Friday at 17:30 IST (12:00 UTC)
 // cron.schedule("30 17 * * 5", combinedCronService);
