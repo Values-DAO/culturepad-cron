@@ -202,3 +202,6 @@ cron.schedule("*/3 * * * *", combinedCronService)
 //     cron_service_onchain();
 //   }, 150000); // 150,000 milliseconds = 2.5 minutes
 // });
+
+// run at every friday at 12 noon
+// cron.schedule("0 12 * * 5", combinedCronService);
