@@ -204,7 +204,8 @@ const combinedCronService = async () => {
 // });
 
 // run at every friday at 12 noon
-cron.schedule("0 12 * * 5", combinedCronService);
+// cron.schedule("0 12 * * 5", combinedCronService);
+cron.schedule("25 12 * * 5", combinedCronService); // run at every friday at 12:25
 
 // run at every saturday at 21:00
 // cron.schedule("0 21 * * 6", combinedCronService);
